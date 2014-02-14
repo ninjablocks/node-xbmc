@@ -15,7 +15,9 @@ class XbmcApi extends EventEmitter
     @.on 'connection:open', =>
       unless @options.silent
         @message 'Attached to XBMC instance.'
-    @.on 'connection:notification', @notifications.delegate
+    @.on 'connection:data', (data) =>
+      if data.method?
+        @notifications.delegate data
 
     @setConnection @options.connection if @options.connection?
 
