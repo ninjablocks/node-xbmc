@@ -1,4 +1,3 @@
-pubsub = require './PubSub'
 debug = require('debug') 'xbmc:Media'
 
 class Media
@@ -22,7 +21,7 @@ class Media
         'thumbnail'
       ]
     dfd.then (data) =>
-      pubsub.emit 'api:episode', @api.scrub data.result.episodedetails
+      @api.emit 'api:episode', @api.scrub data.result.episodedetails
 
   @movies: (options = {}, fn = null) =>
     debug 'movies', options
@@ -32,7 +31,7 @@ class Media
       limits:     options.limits     || {}
     dfd = @api.send 'VideoLibrary.GetMovies', args
     dfd.then (data) =>
-      pubsub.emit 'api:movies', data.result.movies
+      @api.emit 'api:movies', data.result.movies
       fn data if fn
 
   @movie: (id, fn = null) =>
@@ -48,7 +47,7 @@ class Media
       ]
     dfd.then (data) =>
       d = @api.scrub data.result.moviedetails
-      pubsub.emit 'api:movie', d
+      @api.emit 'api:movie', d
       fn d if fn
 
 module.exports = Media

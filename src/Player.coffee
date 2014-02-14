@@ -1,4 +1,3 @@
-pubsub = require './PubSub'
 debug = require('debug') 'xbmc:Player'
 
 class Player
@@ -15,14 +14,14 @@ class Player
       item:    item
       options: options
     dfd.then (data) =>
-      pubsub.emit 'player.open', data
+      @api.emit 'player.open', data
       fn data if fn
 
   @getActivePlayers: (fn = null) =>
     debug 'getActivePlayers'
     dfd = @api.send 'Player.GetActivePlayers'
     dfd.then (data) =>
-      pubsub.emit 'player.activePlayers', data
+      @api.emit 'player.activePlayers', data
       fn data if fn
 
   @playPause: (fn = null) =>
@@ -32,7 +31,7 @@ class Player
       dfd = @api.send 'Player.PlayPause',
         playerid: playerId
       dfd.then (data) =>
-        pubsub.emit 'player.playpause', data
+        @api.emit 'player.playpause', data
         fn data if fn
 
   @stop: (fn = null) =>
@@ -42,7 +41,7 @@ class Player
       dfd = @api.send 'Player.Stop',
         playerid: playerId
       dfd.then (data) =>
-        pubsub.emit 'player.stop', data
+        @api.emit 'player.stop', data
         fn data if fn
 
   @forward = (fn = null) =>
@@ -58,7 +57,7 @@ class Player
         playerid: playerId
         speed:    speed
       dfd.then (data) =>
-        pubsub.emit 'player.setspeed', data
+        @api.emit 'player.setspeed', data
         fn data if fn
 
   @openYoutube: (id, options = {}, fn = null) =>

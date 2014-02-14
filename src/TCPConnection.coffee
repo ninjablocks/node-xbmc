@@ -6,6 +6,8 @@ net =     require 'net'
 
 class Connection
   constructor: (@options = {}) ->
+    @api = null
+
     debug 'constructor', @options
     @options.port       ?= 9090
     @options.host       ?= '127.0.0.1'
@@ -66,7 +68,9 @@ class Connection
     #data.connection = @
     dataVerbose = if typeof(data) is 'object' then JSON.stringify data else data
     debug 'publish', topic, dataVerbose
-    pubsub.emit "connection:#{topic}", data
+
+    target = if @api? then @api else pubsub
+    target.emit "connection:#{topic}", data
 
   onOpen: =>
     debug 'onOpen'

@@ -1,4 +1,3 @@
-pubsub = require './PubSub'
 debug = require('debug') 'xbmc:Notifications'
 
 class Notifications
@@ -12,7 +11,7 @@ class Notifications
   @delegate: (data) =>
     debug 'delegate', data
     type = data.method.split('.On')[1].toLowerCase()
-    pubsub.emit "notification:#{type}", data
+    @api.emit "notification:#{type}", data
     if @[type]?
       @[type] data.params.data
     else
@@ -24,7 +23,7 @@ class Notifications
 
   @stop: (data = null) =>
     debug 'stop', data
-    pubsub.emit 'api:playerStopped', data
+    @api.emit 'api:playerStopped', data
 
   @add: => debug 'add'
 
@@ -48,11 +47,11 @@ class Notifications
 
   @inputrequested: =>
     debug 'inputrequested'
-    pubsub.emit 'api:Input.OnInputRequested'
+    @api.emit 'api:Input.OnInputRequested'
 
   @inputfinished: =>
     debug 'inputfinished'
-    pubsub.emit 'api:Input.OnInputFinished'
+    @api.emit 'api:Input.OnInputFinished'
 
   @wake: => debug 'wake'
 

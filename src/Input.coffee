@@ -1,4 +1,3 @@
-pubsub = require './PubSub'
 debug = require('debug') 'xbmc:Input'
 
 class Input
@@ -14,7 +13,7 @@ class Input
     dfd = @api.send 'Input.SendText',
       text: text
     dfd.then (data) ->
-      pubsub.emit 'api:Input.SendText', data
+      @api.emit 'api:Input.SendText', data
       fn data if fn
 
   @ExecuteAction: (action, fn = null) =>
@@ -24,7 +23,7 @@ class Input
     dfd = @api.send 'Input.ExecuteAction',
       action: action
     dfd.then (data) ->
-      pubsub.emit 'api:Input.ExecuteAction', data
+      @api.emit 'api:Input.ExecuteAction', data
       fn data if fn
 
   @inputMethods: ['Up', 'Down', 'Left', 'Right', 'Select', 'ShowCodec', 'ShowOSD', 'Info', 'Home', 'Down', 'ContextMenu', "Back"]
@@ -38,8 +37,8 @@ for _key in Input.inputMethods
     Input[key] = (fn = null) ->
       debug 'Input', key
       dfd = @api.send "Input.#{key}"
-      dfd.then (data) ->
-        pubsub.emit "api:Input.#{key}", data
+      dfd.then (data) =>
+        @api.emit "api:Input.#{key}", data
         fn data if fn
 
 module.exports = Input
